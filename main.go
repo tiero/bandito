@@ -36,7 +36,7 @@ func main() {
 	r := gin.Default()
 
 	// Health check endpoint
-	r.GET("/v1/healthcheck", func(c *gin.Context) {
+	r.GET("/v1/", func(c *gin.Context) {
 		c.String(http.StatusOK, "OK")
 	})
 
