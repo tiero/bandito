@@ -24,3 +24,9 @@ GOOS=darwin GOARCH=arm64 go build -o ./bin/bandito-darwin-arm64
 ```bash
 GOOS=darwin GOARCH=amd64 go build -o ./bin/bandito-darwin-amd64
 ```
+
+## Running
+
+```bash
+bandito --chat-url="http://example.com" --port="8080" --sentry-dsn="your_sentry_dsn_here"
+```

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,19 +12,22 @@ import (
 )
 
 func main() {
-	// Chat Completions URL to proxy
-	proxyURL := os.Getenv("CHAT_URL")
+	// Define command-line flags
+	var proxyURL string
+	var port string
+	var dsn string
+
+	flag.StringVar(&proxyURL, "chat-url", "", "URL to proxy for chat completions")
+	flag.StringVar(&port, "port", "8000", "Port on which the server will run")
+	flag.StringVar(&dsn, "sentry-dsn", "", "Sentry DSN for error tracking")
+	flag.Parse()
+
+	// Check if chat-url is provided
 	if proxyURL == "" {
-		panic("CHAT_URL env var is missing")
+		panic("chat-url flag is required")
 	}
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8000"
-	}
-
-	// Initialize Sentry
-	dsn := os.Getenv("SENTRY_DSN")
+	// Initialize Sentry if DSN is provided
 	if dsn != "" {
 		err := sentry.Init(sentry.ClientOptions{
 			Dsn: dsn,
@@ -73,6 +77,6 @@ func main() {
 		io.Copy(c.Writer, resp.Body)
 	})
 
-	// Start the server
+	// Start the server on the specified port
 	r.Run(":" + port)
 }
